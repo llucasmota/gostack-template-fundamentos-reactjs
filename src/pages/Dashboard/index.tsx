@@ -38,9 +38,8 @@ const Dashboard: React.FC = () => {
       const response = await api.get(`/transactions`);
       const responseBalance: Balance = response.data.balance;
       const responseTransactions = response.data.transactions;
-      setTransactions([...transactions, responseTransactions]);
+      setTransactions(responseTransactions);
       setBalance(responseBalance);
-      console.log(balance);
     }
 
     loadTransactions();
@@ -92,14 +91,15 @@ const Dashboard: React.FC = () => {
                 <th>Data</th>
               </tr>
             </thead>
-
             <tbody>
-              <tr>
-                <td className="title">Website Hosting</td>
-                <td className="outcome">- R$ 1.000,00</td>
-                <td>Hosting</td>
-                <td>19/04/2020</td>
-              </tr>
+              {transactions.map(transaction => (
+                <tr key={transaction.id}>
+                  <td className="title">{transaction.title}</td>
+                  <td className={transaction.type}> R$ 1.000,00</td>
+                  <td>{transaction.category.title}</td>
+                  <td>{transaction.created_at}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </TableContainer>
