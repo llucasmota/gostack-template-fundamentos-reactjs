@@ -7,7 +7,13 @@ import Header from '../../components/Header';
 import FileList from '../../components/FileList';
 import Upload from '../../components/Upload';
 
-import { Container, Title, ImportFileContainer, Footer } from './styles';
+import {
+  Container,
+  Title,
+  ImportFileContainer,
+  Footer,
+  ErrorComponent,
+} from './styles';
 
 import alert from '../../assets/alert.svg';
 import api from '../../services/api';
@@ -20,15 +26,19 @@ interface FileProps {
 
 const Import: React.FC = () => {
   const [uploadedFiles, setUploadedFiles] = useState<FileProps[]>([]);
+  const [inputError, setInputError] = useState('');
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    const data = new FormData();
-    data.set('file', uploadedFiles[0].file);
     try {
+      const data = new FormData();
+
+      data.set('file', uploadedFiles[0].file);
+
       await api.post('/transactions/import', data);
+      history.goBack();
     } catch (err) {
-      console.log(err.response.error);
+      console.log(err.response);
     }
   }
 
@@ -49,12 +59,12 @@ const Import: React.FC = () => {
         <ImportFileContainer>
           <Upload onUpload={submitFile} />
           {!!uploadedFiles.length && <FileList files={uploadedFiles} />}
-
           <Footer>
             <p>
               <img src={alert} alt="Alert" />
               Permitido apenas arquivos CSV
             </p>
+
             <button onClick={handleUpload} type="button">
               Enviar
             </button>

@@ -7,6 +7,11 @@ export const Container = styled.div`
   margin: 0 auto;
   padding: 40px 20px;
 `;
+export const ErrorComponent = styled.span`
+  display: block;
+  color: #c53030;
+  margin-top: 8px;
+`;
 
 export const Title = styled.h1`
   font-weight: 500;
